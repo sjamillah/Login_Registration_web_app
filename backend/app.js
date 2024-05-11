@@ -1,0 +1,22 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const app = express();
+
+// Middleware
+app.use(bodyParser.json());
+
+// Routes
+const authRoutes = require('./routes/authRoutes');
+const emailRoutes = require('./routes/emailRoutes');
+app.use('/api/auth', authRoutes);
+app.use('/api/email', emailRoutes);
+
+// Database connection
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Error connecting to MongoDB:', err));
+
+module.exports = app;
